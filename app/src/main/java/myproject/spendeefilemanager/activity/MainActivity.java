@@ -43,8 +43,11 @@ public class MainActivity extends BaseActivity {
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         String temp;
-        if(mSettings.contains(DEFAULT_FOLDER_KEY)) temp = mSettings.getString(DEFAULT_FOLDER_KEY, "");
-        else temp = FileManager.getInstance().getStartUrl(this);
+        if (mSettings.contains(DEFAULT_FOLDER_KEY)) {
+            temp = mSettings.getString(DEFAULT_FOLDER_KEY, "");
+        } else {
+            temp = FileManager.getInstance().getStartUrl(this);
+        }
 
         if (savedInstanceState == null) {
             Fragment fragment = FileManagerFragment.newInstance(temp);
@@ -67,8 +70,8 @@ public class MainActivity extends BaseActivity {
         switch (item.getItemId()) {
 
 
-            case R.id.refresh :
-                if(getFragmentRefreshListener()!=null){
+            case R.id.refresh:
+                if (getFragmentRefreshListener() != null) {
                     getFragmentRefreshListener().onRefresh();
                 }
                 return true;
@@ -129,7 +132,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    public interface FragmentRefreshListener{
+    public interface FragmentRefreshListener {
         void onRefresh();
     }
 

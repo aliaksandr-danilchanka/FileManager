@@ -97,7 +97,7 @@ public class DefaultFolderFragment extends Fragment {
         switch (item.getItemId()) {
 
 
-            case R.id.item_default_folder :
+            case R.id.item_default_folder:
                 SharedPreferences.Editor editor = mSettings.edit();
                 editor.putString(DEFAULT_FOLDER_KEY, mPath.getAbsolutePath());
                 editor.apply();
@@ -137,8 +137,11 @@ public class DefaultFolderFragment extends Fragment {
     }
 
     public void openDirectory(File file) {
-        if (mFilesAndFolders != null) mFilesAndFolders.clear();
-        else mFilesAndFolders = new ArrayList<>();
+        if (mFilesAndFolders != null) {
+            mFilesAndFolders.clear();
+        } else {
+            mFilesAndFolders = new ArrayList<>();
+        }
         ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
         if (list.size() != 0) {
             mFilesAndFolders.addAll(list);

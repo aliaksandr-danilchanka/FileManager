@@ -124,7 +124,7 @@ public class FileManagerFragment extends Fragment {
 
         open(mPath);
 
-        ((MainActivity)getActivity()).setFragmentRefreshListener(new MainActivity.FragmentRefreshListener() {
+        ((MainActivity) getActivity()).setFragmentRefreshListener(new MainActivity.FragmentRefreshListener() {
             @Override
             public void onRefresh() {
                 openDirectory(mPath);
@@ -164,8 +164,11 @@ public class FileManagerFragment extends Fragment {
     }
 
     public void openDirectory(File file) {
-        if (mFilesAndFolders != null) mFilesAndFolders.clear();
-        else mFilesAndFolders = new ArrayList<>();
+        if (mFilesAndFolders != null) {
+            mFilesAndFolders.clear();
+        } else {
+            mFilesAndFolders = new ArrayList<>();
+        }
         ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
         if (list.size() != 0) {
             mFilesAndFolders.addAll(list);
