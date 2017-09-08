@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import myproject.spendeefilemanager.R;
+import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
 import myproject.spendeefilemanager.activity.MainActivity;
 import myproject.spendeefilemanager.adapter.FileManagerAdapter;
 import myproject.spendeefilemanager.manager.FileManager;
@@ -38,6 +40,7 @@ import myproject.spendeefilemanager.manager.FileManager;
 public class FileManagerFragment extends Fragment {
 
     public static final String PATH_KEY = "PATH_KEY";
+    public static final String SELECT_ITEM_KEY = "SELECT_ITEM_KEY";
 
     private static File mPath;
     private LinearLayout mViewFileIsEmpty;
@@ -47,6 +50,7 @@ public class FileManagerFragment extends Fragment {
     private FileManagerAdapter mAdapter;
     private ActionMode mActionModes;
     private boolean mClickAllowed;
+    private SparseBooleanArray mSelectedItems;
 
 
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -86,6 +90,7 @@ public class FileManagerFragment extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            mode.finish();
             mActionModes = null;
             mAdapter.clearSelection();
             mClickAllowed = true;
@@ -106,13 +111,16 @@ public class FileManagerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mPath = new File(getArguments().getString(PATH_KEY));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_start_folder, container, false);
+
+        if (savedInstanceState != null) {
+            mSelectedItems = (SparseBooleanArray) savedInstanceState.getParcelable(SELECT_ITEM_KEY);
+        }
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
@@ -134,6 +142,12 @@ public class FileManagerFragment extends Fragment {
         mClickAllowed = true;
         mRecyclerView.setLayoutManager(gridLayoutManager);
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SELECT_ITEM_KEY,  new SparseBooleanArrayParcelable(mAdapter.getSelectedItemsArray()));
     }
 
     public void open(File file) {
@@ -210,7 +224,6 @@ public class FileManagerFragment extends Fragment {
         return true;
     }
 
-
     private void deleteDialog(String message, DialogInterface.OnClickListener onClickListener) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -262,6 +275,12 @@ public class FileManagerFragment extends Fragment {
                 mActionModes.setTitle(mAdapter.getSelectedItemsCount() + "  " + getString(R.string.info_items_selected));
             }
         });
+        if(mSelectedItems != null){
+            mClickAllowed = false;
+            mAdapter.setSelectedItemsArray(mSelectedItems);
+            mActionModes = getActivity().startActionMode(actionModeCallback);
+            mActionModes.setTitle(mAdapter.getSelectedItemsCount() + "  " + getString(R.string.info_items_selected));
+        }
         mRecyclerView.setAdapter(mAdapter);
     }
 

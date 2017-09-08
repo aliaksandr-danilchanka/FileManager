@@ -73,10 +73,9 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
             }
         });
 
-        if(mSelectedItems.get(position,false)) {
+        if (mSelectedItems.get(position, false)) {
             holder.mCardView.setCardBackgroundColor(Color.parseColor("#6666FF"));
-        }
-        else holder.mCardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+        } else holder.mCardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
 
     }
 
@@ -85,25 +84,29 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
         return mFilesAndFolders.size();
     }
 
-    public ArrayList<File>  getSelectedItems() {
-
+    public ArrayList<File> getSelectedItems() {
         ArrayList<File> list = new ArrayList<>();
 
         for (int i = 0; i < mSelectedItems.size(); i++) {
             list.add(mFilesAndFolders.get(mSelectedItems.keyAt(i)));
         }
-
         return list;
     }
 
-    public void clearSelection() {
+    public SparseBooleanArray  getSelectedItemsArray() {
+        return mSelectedItems;
+    }
 
+    public void  setSelectedItemsArray(SparseBooleanArray selectedItems) {
+        this.mSelectedItems = selectedItems;
+    }
+
+    public void clearSelection() {
         mSelectedItems.clear();
         notifyDataSetChanged();
     }
 
     public void toggleSelection(int position) {
-
         if (mSelectedItems.get(position, false)) {
             mSelectedItems.delete(position);
         } else {
@@ -201,6 +204,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
     public int getSelectedItemsCount() {
         return mSelectedItems.size();
     }
+
 
     public interface OnItemClickListener {
         public void onItemClick(View view, int position);
