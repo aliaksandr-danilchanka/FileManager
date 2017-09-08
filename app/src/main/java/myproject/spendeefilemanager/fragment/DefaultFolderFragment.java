@@ -1,0 +1,181 @@
+package myproject.spendeefilemanager.fragment;
+
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import myproject.spendeefilemanager.R;
+import myproject.spendeefilemanager.adapter.DefaultFolderAdapter;
+import myproject.spendeefilemanager.manager.FileManager;
+
+
+/**
+ * Created by Aliaksandr on 9/8/2017.
+ */
+
+public class DefaultFolderFragment extends Fragment {
+
+    public static final String PATH_KEY = "PATH_KEY";
+    public static final String DEFAULT_FOLDER_KEY = "DEFAULT_FOLDER_KEY";
+    public static final String APP_PREFERENCES = "APP_PREFERENCES";
+
+    private static File mPath;
+    private LinearLayout mViewFileIsEmpty;
+    private RecyclerView mRecyclerView;
+    private ArrayList<File> mFilesAndFolders;
+    private Toolbar mToolbar;
+    private DefaultFolderAdapter mAdapter;
+    private SharedPreferences mSettings;
+
+    public static DefaultFolderFragment newInstance(String file) {
+
+        Bundle args = new Bundle();
+
+        args.putString(PATH_KEY, file);
+        DefaultFolderFragment fragment = new DefaultFolderFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mPath = new File(getArguments().getString(PATH_KEY));
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_start_folder, container, false);
+        setHasOptionsMenu(true);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
+        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
+
+        mToolbar.setTitle(getString(R.string.default_folder));
+
+        mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+
+        open(mPath);
+
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_default_folder, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+
+            case R.id.item_default_folder :
+                SharedPreferences.Editor editor = mSettings.edit();
+                editor.putString(DEFAULT_FOLDER_KEY, mPath.getAbsolutePath());
+                editor.apply();
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void open(File file) {
+
+        if (!file.canRead()) {
+            Toast.makeText(getContext(), "Do not have read access", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (file.isFile()) {
+
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            Intent i = new Intent();
+            i.setAction(Intent.ACTION_VIEW);
+            String mimeType = mime.getMimeTypeFromExtension(FileManager.getInstance()
+                    .getExtension(file.getAbsolutePath()).substring(1));
+            i.setDataAndType(Uri.fromFile(file), mimeType);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            try {
+                getContext().startActivity(i);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+            }
+        } else if (file.isDirectory()) {
+            openDirectory(file);
+        }
+    }
+
+    public void openDirectory(File file) {
+        if (mFilesAndFolders != null) mFilesAndFolders.clear();
+        else mFilesAndFolders = new ArrayList<>();
+        ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
+        if (list.size() != 0) {
+            mFilesAndFolders.addAll(list);
+            initializeAdapter();
+            showRecyclerView();
+        } else {
+            showFileIsEmptyView();
+        }
+    }
+
+    private void initializeAdapter() {
+        mAdapter = new DefaultFolderAdapter(mFilesAndFolders, getContext(), new DefaultFolderAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                File singleItem = mFilesAndFolders.get(position);
+                if (singleItem.isDirectory()) {
+                    Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container_settings, myFragment)
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    open(singleItem);
+                }
+            }
+        });
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void showRecyclerView() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mViewFileIsEmpty.setVisibility(View.GONE);
+    }
+
+    private void showFileIsEmptyView() {
+        mRecyclerView.setVisibility(View.GONE);
+        mViewFileIsEmpty.setVisibility(View.VISIBLE);
+    }
+}
