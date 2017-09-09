@@ -1,7 +1,9 @@
 package myproject.spendeefilemanager.fragment;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -98,14 +100,32 @@ public class DefaultFolderFragment extends Fragment {
 
 
             case R.id.item_default_folder:
-                SharedPreferences.Editor editor = mSettings.edit();
-                editor.putString(DEFAULT_FOLDER_KEY, mPath.getAbsolutePath());
-                editor.apply();
+                setDefaultFolderDialog(getString(R.string.delete_dialog), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        SharedPreferences.Editor editor = mSettings.edit();
+                        editor.putString(DEFAULT_FOLDER_KEY, mPath.getAbsolutePath());
+                        editor.apply();
+                        Toast.makeText(getContext(), getString(R.string.default_folder_selected), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 return true;
 
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setDefaultFolderDialog(String message, DialogInterface.OnClickListener onClickListener) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(message)
+                .setPositiveButton(getString(R.string.ok), onClickListener)
+                .setNegativeButton(getString(R.string.cancel), null)
+                .create()
+                .show();
+
     }
 
 
