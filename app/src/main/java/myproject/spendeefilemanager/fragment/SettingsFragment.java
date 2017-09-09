@@ -52,6 +52,7 @@ public class SettingsFragment extends Fragment {
                 Fragment myFragment = DefaultFolderFragment.newInstance(FileManager.getInstance().getStartUrl(getContext()));
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations( R.anim.left, R.anim.right)
                         .replace(R.id.container_settings, myFragment)
                         .addToBackStack(null)
                         .commit();

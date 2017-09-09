@@ -249,6 +249,7 @@ public class FileManagerFragment extends Fragment {
                         Fragment fragment = FileManagerFragment.newInstance(singleItem.getAbsolutePath());
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
+                                .setCustomAnimations( R.anim.left, R.anim.right)
                                 .replace(R.id.container, fragment)
                                 .addToBackStack(null)
                                 .commit();

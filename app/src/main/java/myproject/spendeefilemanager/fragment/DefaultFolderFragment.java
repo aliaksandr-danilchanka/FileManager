@@ -180,6 +180,7 @@ public class DefaultFolderFragment extends Fragment {
                     Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
+                            .setCustomAnimations( R.anim.left, R.anim.right)
                             .replace(R.id.container_settings, myFragment)
                             .addToBackStack(null)
                             .commit();
