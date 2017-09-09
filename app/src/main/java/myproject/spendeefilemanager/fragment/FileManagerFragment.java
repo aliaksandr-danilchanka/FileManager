@@ -34,8 +34,6 @@ import myproject.spendeefilemanager.adapter.FileManagerAdapter;
 import myproject.spendeefilemanager.manager.FileManager;
 import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
 
-import static myproject.spendeefilemanager.R.id.recyclerView;
-
 
 /**
  * Created by Aliaksandr on 9/6/2017.
@@ -112,22 +110,19 @@ public class FileManagerFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPath = new File(getArguments().getString(PATH_KEY));
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_start_folder, container, false);
 
+        mPath = new File(getArguments().getString(PATH_KEY));
         if (savedInstanceState != null) {
             mSelectedItems = (SparseBooleanArray) savedInstanceState.getParcelable(SELECT_ITEM_KEY);
         }
 
 
-        mRecyclerView = (RecyclerView) view.findViewById(recyclerView);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
         mToolbar.setTitle(mPath.getName());

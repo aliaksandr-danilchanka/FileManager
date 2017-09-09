@@ -61,18 +61,14 @@ public class DefaultFolderFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mPath = new File(getArguments().getString(PATH_KEY));
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_start_folder, container, false);
         setHasOptionsMenu(true);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mPath = new File(getArguments().getString(PATH_KEY));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
 
