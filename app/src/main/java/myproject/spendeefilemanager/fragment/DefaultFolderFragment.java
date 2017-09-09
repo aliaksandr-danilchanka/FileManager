@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -78,12 +80,17 @@ public class DefaultFolderFragment extends Fragment {
 
         mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-
         open(mPath);
 
-        mRecyclerView.setLayoutManager(gridLayoutManager);
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+            mRecyclerView.setHasFixedSize(true);
+        }else{
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+            gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+            mRecyclerView.setLayoutManager(gridLayoutManager);
+        }
         return view;
     }
 

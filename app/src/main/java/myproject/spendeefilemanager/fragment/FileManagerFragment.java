@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
@@ -27,10 +29,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import myproject.spendeefilemanager.R;
-import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
 import myproject.spendeefilemanager.activity.MainActivity;
 import myproject.spendeefilemanager.adapter.FileManagerAdapter;
 import myproject.spendeefilemanager.manager.FileManager;
+import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
+
+import static myproject.spendeefilemanager.R.id.recyclerView;
 
 
 /**
@@ -123,15 +127,22 @@ public class FileManagerFragment extends Fragment {
         }
 
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mRecyclerView = (RecyclerView) view.findViewById(recyclerView);
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
         mToolbar.setTitle(mPath.getName());
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
-
         open(mPath);
+
+        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+            mRecyclerView.setHasFixedSize(true);
+        }else{
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+            gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+            mRecyclerView.setLayoutManager(gridLayoutManager);
+        }
 
         ((MainActivity) getActivity()).setFragmentRefreshListener(new MainActivity.FragmentRefreshListener() {
             @Override
@@ -141,7 +152,7 @@ public class FileManagerFragment extends Fragment {
         });
 
         mClickAllowed = true;
-        mRecyclerView.setLayoutManager(gridLayoutManager);
+
         return view;
     }
 
