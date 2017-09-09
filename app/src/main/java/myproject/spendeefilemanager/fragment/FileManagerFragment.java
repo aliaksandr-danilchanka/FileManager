@@ -148,7 +148,9 @@ public class FileManagerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(SELECT_ITEM_KEY, new SparseBooleanArrayParcelable(mAdapter.getSelectedItemsArray()));
+        if(mFilesAndFolders.size() > 0) {
+            outState.putParcelable(SELECT_ITEM_KEY, new SparseBooleanArrayParcelable(mAdapter.getSelectedItemsArray()));
+        }
     }
 
     public void open(File file) {
