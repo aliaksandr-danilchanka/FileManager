@@ -116,23 +116,10 @@ public class DefaultFolderFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setDefaultFolderDialog(String message, DialogInterface.OnClickListener onClickListener) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setMessage(message)
-                .setPositiveButton(getString(R.string.ok), onClickListener)
-                .setNegativeButton(getString(R.string.cancel), null)
-                .create()
-                .show();
-
-    }
-
-
     public void open(File file) {
 
         if (!file.canRead()) {
-            Toast.makeText(getContext(), "Do not have read access", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.not_read_access), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -149,7 +136,7 @@ public class DefaultFolderFragment extends Fragment {
             try {
                 getContext().startActivity(i);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.no_handler_for_type), Toast.LENGTH_LONG).show();
             }
         } else if (file.isDirectory()) {
             openDirectory(file);
@@ -170,6 +157,18 @@ public class DefaultFolderFragment extends Fragment {
         } else {
             showFileIsEmptyView();
         }
+    }
+
+    private void setDefaultFolderDialog(String message, DialogInterface.OnClickListener onClickListener) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(message)
+                .setPositiveButton(getString(R.string.ok), onClickListener)
+                .setNegativeButton(getString(R.string.cancel), null)
+                .create()
+                .show();
+
     }
 
     private void initializeAdapter() {

@@ -23,8 +23,13 @@
 
     <string name="error_request_permission">You need to give access to External Storage</string>
     <string name="delete_dialog">Do you want delete this files?</string>
+    <string name="set_default_folder_dialog">Do you want set this default folder?</string>
     <string name="info_items_selected">items selected</string>
 
 
+    <string name="default_folder_selected">Files successfully selected</string>
+    <string name="not_read_access">Do not have read access</string>
+    <string name="files_successfully_deleted">Files successfully deleted</string>
+    <string name="no_handler_for_type">No handler for this type of file.</string>
 
 </resources>

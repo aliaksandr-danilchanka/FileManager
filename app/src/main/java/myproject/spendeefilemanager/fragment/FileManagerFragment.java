@@ -148,7 +148,7 @@ public class FileManagerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mFilesAndFolders.size() > 0) {
+        if (mFilesAndFolders.size() > 0) {
             outState.putParcelable(SELECT_ITEM_KEY, new SparseBooleanArrayParcelable(mAdapter.getSelectedItemsArray()));
         }
     }
@@ -156,7 +156,7 @@ public class FileManagerFragment extends Fragment {
     public void open(File file) {
 
         if (!file.canRead()) {
-            Toast.makeText(getContext(), "Do not have read access", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.not_read_access), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -173,7 +173,7 @@ public class FileManagerFragment extends Fragment {
             try {
                 getContext().startActivity(i);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.no_handler_for_type), Toast.LENGTH_LONG).show();
             }
         } else if (file.isDirectory()) {
             openDirectory(file);
@@ -206,7 +206,7 @@ public class FileManagerFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        Toast.makeText(getContext(), "Files successfully deleted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.files_successfully_deleted), Toast.LENGTH_SHORT).show();
         openDirectory(mPath);
     }
 
