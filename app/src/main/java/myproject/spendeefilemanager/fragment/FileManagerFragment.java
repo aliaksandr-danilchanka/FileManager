@@ -122,6 +122,7 @@ public class FileManagerFragment extends Fragment {
             mSelectedItems = (SparseBooleanArray) savedInstanceState.getParcelable(SELECT_ITEM_KEY);
         }
 
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
@@ -147,7 +148,7 @@ public class FileManagerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(SELECT_ITEM_KEY,  new SparseBooleanArrayParcelable(mAdapter.getSelectedItemsArray()));
+        outState.putParcelable(SELECT_ITEM_KEY, new SparseBooleanArrayParcelable(mAdapter.getSelectedItemsArray()));
     }
 
     public void open(File file) {
@@ -275,7 +276,7 @@ public class FileManagerFragment extends Fragment {
                 mActionModes.setTitle(mAdapter.getSelectedItemsCount() + "  " + getString(R.string.info_items_selected));
             }
         });
-        if(mSelectedItems != null){
+        if (mSelectedItems != null && mSelectedItems.size() > 0) {
             mClickAllowed = false;
             mAdapter.setSelectedItemsArray(mSelectedItems);
             mActionModes = getActivity().startActionMode(actionModeCallback);
