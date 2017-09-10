@@ -16,9 +16,7 @@
     <string name="rename">Rename</string>
     <string name="default_folder">Default folder</string>
     <string name="set_default_folder">Set default folder</string>
-
-    <string name="tag_fragment">MY_TAG</string>
-
+    <string name="before_package_name">...</string>
 
 
     <string name="error_request_permission">You need to give access to External Storage</string>

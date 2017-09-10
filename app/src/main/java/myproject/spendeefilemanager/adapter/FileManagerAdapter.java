@@ -62,7 +62,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
         final File singleItem = mFilesAndFolders.get(position);
 
         if (singleItem == mBeforeFile) {
-            holder.mTitle.setText("...");
+            holder.mTitle.setText(mContext.getString(R.string.before_package_name));
             holder.mLastModified.setText(singleItem.getAbsolutePath());
             holder.mIcon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_back));
         } else {
