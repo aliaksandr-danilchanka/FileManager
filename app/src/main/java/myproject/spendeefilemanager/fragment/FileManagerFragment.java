@@ -129,11 +129,11 @@ public class FileManagerFragment extends Fragment {
 
         open(mPath);
 
-        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(linearLayoutManager);
             mRecyclerView.setHasFixedSize(true);
-        }else{
+        } else {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
             gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(gridLayoutManager);
@@ -256,7 +256,7 @@ public class FileManagerFragment extends Fragment {
                         Fragment fragment = FileManagerFragment.newInstance(singleItem.getAbsolutePath());
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
-                                .setCustomAnimations( R.anim.left, R.anim.right)
+                                .setCustomAnimations(R.anim.left, R.anim.right)
                                 .replace(R.id.container, fragment)
                                 .addToBackStack(null)
                                 .commit();
@@ -270,20 +270,20 @@ public class FileManagerFragment extends Fragment {
             public void onItemLongClick(View view, int position) {
                 mClickAllowed = false;
 
-                if (mActionModes != null) {
-
+                if (!mPath.getAbsolutePath().equals(FileManager.getInstance().getStartUrl(getContext())) &&
+                        position == 0) {
+                } else {
+                    if (mActionModes != null) {
+                        mAdapter.toggleSelection(position);
+                        mActionModes.setTitle(mAdapter.getSelectedItemsCount() + "  " + getString(R.string.info_items_selected));
+                        if (mAdapter.getSelectedItemsCount() <= 0)
+                            mActionModes.finish();
+                        return;
+                    }
+                    mActionModes = getActivity().startActionMode(actionModeCallback);
                     mAdapter.toggleSelection(position);
                     mActionModes.setTitle(mAdapter.getSelectedItemsCount() + "  " + getString(R.string.info_items_selected));
-
-                    if (mAdapter.getSelectedItemsCount() <= 0)
-                        mActionModes.finish();
-
-                    return;
                 }
-
-                mActionModes = getActivity().startActionMode(actionModeCallback);
-                mAdapter.toggleSelection(position);
-                mActionModes.setTitle(mAdapter.getSelectedItemsCount() + "  " + getString(R.string.info_items_selected));
             }
         });
         if (mSelectedItems != null && mSelectedItems.size() > 0) {
