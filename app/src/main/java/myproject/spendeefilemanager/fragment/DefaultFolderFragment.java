@@ -158,6 +158,7 @@ public class DefaultFolderFragment extends Fragment {
             initializeAdapter();
             showRecyclerView();
         } else {
+            initializeAdapter();
             showFileIsEmptyView();
         }
     }
@@ -175,7 +176,7 @@ public class DefaultFolderFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        mAdapter = new DefaultFolderAdapter(mFilesAndFolders, getContext(), new DefaultFolderAdapter.OnItemClickListener() {
+        mAdapter = new DefaultFolderAdapter(mFilesAndFolders, getContext(), mPath, new DefaultFolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 File singleItem = mFilesAndFolders.get(position);
@@ -201,7 +202,7 @@ public class DefaultFolderFragment extends Fragment {
     }
 
     private void showFileIsEmptyView() {
-        mRecyclerView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
         mViewFileIsEmpty.setVisibility(View.VISIBLE);
     }
 }

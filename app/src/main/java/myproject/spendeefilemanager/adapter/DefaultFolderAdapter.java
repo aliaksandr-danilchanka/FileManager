@@ -29,11 +29,18 @@ public class DefaultFolderAdapter extends RecyclerView.Adapter<DefaultFolderAdap
     private ArrayList<File> mFilesAndFolders;
     private OnItemClickListener mOnItemClickListener;
     private Context mContext;
+    private File mBeforeFile;
 
 
-    public DefaultFolderAdapter(ArrayList<File> filesAndFolders, Context context, OnItemClickListener onItemClickListener) {
+    public DefaultFolderAdapter(ArrayList<File> filesAndFolders, Context context, File file, OnItemClickListener onItemClickListener) {
         this.mFilesAndFolders = filesAndFolders;
         this.mOnItemClickListener = onItemClickListener;
+        if (!file.getAbsolutePath().equals(FileManager.getInstance().getStartUrl(context))) {
+            File beforeFile = new File(file.getAbsolutePath()
+                    .substring(0, file.getAbsolutePath().length() - file.getName().length() - 1));
+            this.mBeforeFile = beforeFile;
+            this.mFilesAndFolders.add(0, mBeforeFile);
+        }
         this.mContext = context;
     }
 
@@ -51,9 +58,15 @@ public class DefaultFolderAdapter extends RecyclerView.Adapter<DefaultFolderAdap
 
         final File singleItem = mFilesAndFolders.get(position);
 
-        holder.mTitle.setText(singleItem.getName());
-        holder.mLastModified.setText(new Date(singleItem.lastModified()).toString());
-        setIcon(singleItem, holder);
+        if (singleItem == mBeforeFile) {
+            holder.mTitle.setText("...");
+            holder.mLastModified.setText(singleItem.getAbsolutePath());
+            holder.mIcon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_back));
+        } else {
+            holder.mTitle.setText(singleItem.getName());
+            holder.mLastModified.setText(new Date(singleItem.lastModified()).toString());
+            setIcon(singleItem, holder);
+        }
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override

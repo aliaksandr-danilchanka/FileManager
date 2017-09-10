@@ -198,6 +198,7 @@ public class FileManagerFragment extends Fragment {
             initializeAdapter();
             showRecyclerView();
         } else {
+            initializeAdapter();
             showFileIsEmptyView();
         }
     }
@@ -246,7 +247,7 @@ public class FileManagerFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        mAdapter = new FileManagerAdapter(mFilesAndFolders, getContext(), new FileManagerAdapter.OnItemClickListener() {
+        mAdapter = new FileManagerAdapter(mFilesAndFolders, getContext(), mPath, new FileManagerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 File singleItem = mFilesAndFolders.get(position);
@@ -300,7 +301,7 @@ public class FileManagerFragment extends Fragment {
     }
 
     private void showFileIsEmptyView() {
-        mRecyclerView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
         mViewFileIsEmpty.setVisibility(View.VISIBLE);
     }
 

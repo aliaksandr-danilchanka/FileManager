@@ -29,13 +29,20 @@ import myproject.spendeefilemanager.manager.FileManager;
 public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.ListItemViewHolder> {
 
     private ArrayList<File> mFilesAndFolders;
+    private File mBeforeFile;
     private OnItemClickListener mOnItemClickListener;
     private Context mContext;
     private SparseBooleanArray mSelectedItems;
 
-    public FileManagerAdapter(ArrayList<File> filesAndFolders, Context context, OnItemClickListener onItemClickListener) {
+    public FileManagerAdapter(ArrayList<File> filesAndFolders, Context context, File file, OnItemClickListener onItemClickListener) {
         this.mFilesAndFolders = filesAndFolders;
         this.mOnItemClickListener = onItemClickListener;
+        if (!file.getAbsolutePath().equals(FileManager.getInstance().getStartUrl(context))) {
+            File beforeFile = new File(file.getAbsolutePath()
+                    .substring(0, file.getAbsolutePath().length() - file.getName().length() - 1));
+            this.mBeforeFile = beforeFile;
+            this.mFilesAndFolders.add(0, mBeforeFile);
+        }
         mSelectedItems = new SparseBooleanArray();
         this.mContext = context;
     }
@@ -54,9 +61,16 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
 
         final File singleItem = mFilesAndFolders.get(position);
 
-        holder.mTitle.setText(singleItem.getName());
-        holder.mLastModified.setText(new Date(singleItem.lastModified()).toString());
-        setIcon(singleItem, holder);
+        if (singleItem == mBeforeFile) {
+            holder.mTitle.setText("...");
+            holder.mLastModified.setText(singleItem.getAbsolutePath());
+            holder.mIcon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_back));
+        } else {
+            holder.mTitle.setText(singleItem.getName());
+            holder.mLastModified.setText(new Date(singleItem.lastModified()).toString());
+            setIcon(singleItem, holder);
+        }
+
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,11 +107,11 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
         return list;
     }
 
-    public SparseBooleanArray  getSelectedItemsArray() {
+    public SparseBooleanArray getSelectedItemsArray() {
         return mSelectedItems;
     }
 
-    public void  setSelectedItemsArray(SparseBooleanArray selectedItems) {
+    public void setSelectedItemsArray(SparseBooleanArray selectedItems) {
         this.mSelectedItems = selectedItems;
     }
 
