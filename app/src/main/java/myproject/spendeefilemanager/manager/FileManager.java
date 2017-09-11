@@ -6,6 +6,11 @@ import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  * Created by Aliaksandr on 9/6/2017.
  */
@@ -29,6 +34,34 @@ public class FileManager {
             temp = "/";
         else temp = Environment.getExternalStorageDirectory().toString();
         return temp;
+    }
+
+    public ArrayList<File> setSorted(ArrayList<File> files) {
+        ArrayList<File> mFiles = removeHiddenFiles(files);
+        Collections.sort(mFiles, new Comparator<File>() {
+            @Override
+            public int compare(File lhs, File rhs) {
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        });
+        return mFiles;
+    }
+
+    public boolean isHiddenFile(File file) {
+
+        return file.getName().startsWith(".");
+    }
+
+    public ArrayList<File> removeHiddenFiles(ArrayList<File> files) {
+
+        ArrayList<File> list = new ArrayList<>();
+
+        for(File file: files) {
+            if (!isHiddenFile(file))
+                list.add(file);
+        }
+
+        return list;
     }
 
     public String getExtension(String url) {

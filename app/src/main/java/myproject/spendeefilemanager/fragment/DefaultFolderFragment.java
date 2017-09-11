@@ -154,7 +154,7 @@ public class DefaultFolderFragment extends Fragment {
         }
         ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
         if (list.size() != 0) {
-            mFilesAndFolders.addAll(list);
+            mFilesAndFolders = FileManager.getInstance().setSorted(list);
             initializeAdapter();
             showRecyclerView();
         } else {
