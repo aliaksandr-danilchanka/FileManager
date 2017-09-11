@@ -117,10 +117,14 @@ public class FileManagerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_start_folder, container, false);
 
         mPath = new File(getArguments().getString(PATH_KEY));
+
+        mClickAllowed = true;
         if (savedInstanceState != null) {
             mSelectedItems = (SparseBooleanArray) savedInstanceState.getParcelable(SELECT_ITEM_KEY);
+            if (mSelectedItems.size() > 0) {
+                mClickAllowed = false;
+            }
         }
-
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
@@ -145,9 +149,6 @@ public class FileManagerFragment extends Fragment {
                 openDirectory(mPath);
             }
         });
-
-        mClickAllowed = true;
-
         return view;
     }
 
