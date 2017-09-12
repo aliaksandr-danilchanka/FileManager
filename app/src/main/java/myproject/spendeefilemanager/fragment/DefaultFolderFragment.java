@@ -76,11 +76,11 @@ public class DefaultFolderFragment extends Fragment {
 
         open(mPath);
 
-        if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(linearLayoutManager);
             mRecyclerView.setHasFixedSize(true);
-        }else{
+        } else {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
             gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(gridLayoutManager);
@@ -151,8 +151,18 @@ public class DefaultFolderFragment extends Fragment {
             mFilesAndFolders = new ArrayList<>();
         }
         ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
-        if (list.size() != 0) {
-            mFilesAndFolders = FileManager.getInstance().setSorted(list);
+        ArrayList<File> listOfDirectory = new ArrayList<>();
+        ArrayList<File> listOfFiles = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isDirectory()) {
+                listOfDirectory.add(list.get(i));
+            } else {
+                listOfFiles.add(list.get(i));
+            }
+        }
+        if (listOfDirectory.size() != 0 || listOfFiles.size() != 0) {
+            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfDirectory));
+            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfFiles));
             initializeAdapter();
             showRecyclerView();
         } else {
@@ -182,7 +192,7 @@ public class DefaultFolderFragment extends Fragment {
                     Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .setCustomAnimations( R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
+                            .setCustomAnimations(R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
                             .replace(R.id.container_default_folder, myFragment)
                             .addToBackStack(null)
                             .commit();

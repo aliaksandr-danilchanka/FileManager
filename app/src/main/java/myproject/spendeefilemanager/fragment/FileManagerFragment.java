@@ -194,8 +194,18 @@ public class FileManagerFragment extends Fragment {
             mFilesAndFolders = new ArrayList<>();
         }
         ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
-        if (list.size() != 0) {
-            mFilesAndFolders = FileManager.getInstance().setSorted(list);
+        ArrayList<File> listOfDirectory = new ArrayList<>();
+        ArrayList<File> listOfFiles = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isDirectory()) {
+                listOfDirectory.add(list.get(i));
+            } else {
+                listOfFiles.add(list.get(i));
+            }
+        }
+        if (listOfDirectory.size() != 0 || listOfFiles.size() != 0) {
+            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfDirectory));
+            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfFiles));
             initializeAdapter();
             showRecyclerView();
         } else {
