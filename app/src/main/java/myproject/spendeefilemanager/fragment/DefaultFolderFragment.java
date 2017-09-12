@@ -103,7 +103,7 @@ public class DefaultFolderFragment extends Fragment {
 
 
             case R.id.item_default_folder:
-                setDefaultFolderDialog(getString(R.string.delete_dialog), new DialogInterface.OnClickListener() {
+                setDefaultFolderDialog(getString(R.string.set_default_folder_dialog), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         SharedPreferences.Editor editor = mSettings.edit();
@@ -184,7 +184,7 @@ public class DefaultFolderFragment extends Fragment {
                     Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .setCustomAnimations( R.anim.left, R.anim.right)
+                            .setCustomAnimations( R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
                             .replace(R.id.container_settings, myFragment)
                             .addToBackStack(null)
                             .commit();
