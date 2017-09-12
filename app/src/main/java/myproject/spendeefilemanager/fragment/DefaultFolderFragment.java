@@ -1,13 +1,10 @@
 package myproject.spendeefilemanager.fragment;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,24 +17,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.adapter.DefaultFolderAdapter;
-import myproject.spendeefilemanager.manager.FileManager;
 
 
 /**
  * Created by Aliaksandr on 9/8/2017.
  */
 
-public class DefaultFolderFragment extends Fragment {
+public class DefaultFolderFragment extends BaseFileManagerFragment {
 
     public static final String PATH_KEY = "PATH_KEY";
     public static final String DEFAULT_FOLDER_KEY = "DEFAULT_FOLDER_KEY";
@@ -74,7 +68,13 @@ public class DefaultFolderFragment extends Fragment {
 
         mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        open(mPath);
+        mFilesAndFolders = open(mPath);
+        if (mFilesAndFolders.size() > 0) {
+            showRecyclerView();
+        } else {
+            showFileIsEmptyView();
+        }
+        initializeAdapter();
 
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -115,60 +115,6 @@ public class DefaultFolderFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void open(File file) {
-
-        if (!file.canRead()) {
-            Toast.makeText(getContext(), getString(R.string.not_read_access), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (file.isFile()) {
-
-            MimeTypeMap mime = MimeTypeMap.getSingleton();
-            Intent i = new Intent();
-            i.setAction(Intent.ACTION_VIEW);
-            String mimeType = mime.getMimeTypeFromExtension(FileManager.getInstance()
-                    .getExtension(file.getAbsolutePath()).substring(1));
-            i.setDataAndType(Uri.fromFile(file), mimeType);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            try {
-                getContext().startActivity(i);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(), getString(R.string.no_handler_for_type), Toast.LENGTH_LONG).show();
-            }
-        } else if (file.isDirectory()) {
-            openDirectory(file);
-        }
-    }
-
-    public void openDirectory(File file) {
-        if (mFilesAndFolders != null) {
-            mFilesAndFolders.clear();
-        } else {
-            mFilesAndFolders = new ArrayList<>();
-        }
-        ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
-        ArrayList<File> listOfDirectory = new ArrayList<>();
-        ArrayList<File> listOfFiles = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).isDirectory()) {
-                listOfDirectory.add(list.get(i));
-            } else {
-                listOfFiles.add(list.get(i));
-            }
-        }
-        if (listOfDirectory.size() != 0 || listOfFiles.size() != 0) {
-            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfDirectory));
-            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfFiles));
-            initializeAdapter();
-            showRecyclerView();
-        } else {
-            initializeAdapter();
-            showFileIsEmptyView();
-        }
     }
 
     private void setDefaultFolderDialog(String message, DialogInterface.OnClickListener onClickListener) {

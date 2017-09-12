@@ -1,11 +1,8 @@
 package myproject.spendeefilemanager.fragment;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -39,7 +35,7 @@ import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
  * Created by Aliaksandr on 9/6/2017.
  */
 
-public class FileManagerFragment extends Fragment {
+public class FileManagerFragment extends BaseFileManagerFragment {
 
     public static final String PATH_KEY = "PATH_KEY";
     public static final String SELECT_ITEM_KEY = "SELECT_ITEM_KEY";
@@ -131,7 +127,8 @@ public class FileManagerFragment extends Fragment {
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
         mToolbar.setTitle(mPath.getName());
 
-        open(mPath);
+        mFilesAndFolders = open(mPath);
+        setView(mFilesAndFolders);
 
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -146,7 +143,8 @@ public class FileManagerFragment extends Fragment {
         ((MainActivity) getActivity()).setFragmentRefreshListener(new MainActivity.FragmentRefreshListener() {
             @Override
             public void onRefresh() {
-                openDirectory(mPath);
+                mFilesAndFolders = openDirectory(mPath);
+                setView(mFilesAndFolders);
             }
         });
         return view;
@@ -160,58 +158,13 @@ public class FileManagerFragment extends Fragment {
         }
     }
 
-    public void open(File file) {
-
-        if (!file.canRead()) {
-            Toast.makeText(getContext(), getString(R.string.not_read_access), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (file.isFile()) {
-
-            MimeTypeMap mime = MimeTypeMap.getSingleton();
-            Intent i = new Intent();
-            i.setAction(Intent.ACTION_VIEW);
-            String mimeType = mime.getMimeTypeFromExtension(FileManager.getInstance()
-                    .getExtension(file.getAbsolutePath()).substring(1));
-            i.setDataAndType(Uri.fromFile(file), mimeType);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            try {
-                getContext().startActivity(i);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(), getString(R.string.no_handler_for_type), Toast.LENGTH_LONG).show();
-            }
-        } else if (file.isDirectory()) {
-            openDirectory(file);
-        }
-    }
-
-    public void openDirectory(File file) {
-        if (mFilesAndFolders != null) {
-            mFilesAndFolders.clear();
-        } else {
-            mFilesAndFolders = new ArrayList<>();
-        }
-        ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
-        ArrayList<File> listOfDirectory = new ArrayList<>();
-        ArrayList<File> listOfFiles = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).isDirectory()) {
-                listOfDirectory.add(list.get(i));
-            } else {
-                listOfFiles.add(list.get(i));
-            }
-        }
-        if (listOfDirectory.size() != 0 || listOfFiles.size() != 0) {
-            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfDirectory));
-            mFilesAndFolders.addAll(FileManager.getInstance().setSorted(listOfFiles));
-            initializeAdapter();
+    private void setView(ArrayList<File> files) {
+        if (files.size() > 0) {
             showRecyclerView();
         } else {
-            initializeAdapter();
             showFileIsEmptyView();
         }
+        initializeAdapter();
     }
 
     public void delete(ArrayList<File> files) {
@@ -267,7 +220,7 @@ public class FileManagerFragment extends Fragment {
                         Fragment fragment = FileManagerFragment.newInstance(singleItem.getAbsolutePath());
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
-                                .setCustomAnimations( R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
+                                .setCustomAnimations(R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
                                 .replace(R.id.container, fragment)
                                 .addToBackStack(null)
                                 .commit();
