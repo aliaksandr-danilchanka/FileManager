@@ -4,8 +4,9 @@
 
     <item android:id="@+id/item_default_folder"
           android:title="@string/set_default_folder"
+          android:icon="@drawable/ic_done_for_default_folder"
           android:visible="true"
-          app:showAsAction="never"
+          app:showAsAction="ifRoom"
         />
 
 
