@@ -21,7 +21,7 @@
 
     <string name="error_request_permission">You need to give access to External Storage</string>
     <string name="delete_dialog">Do you want delete this files?</string>
-    <string name="set_default_folder_dialog">Do you want set this default folder?</string>
+    <string name="set_default_folder_dialog">Do you want selected this default folder?</string>
     <string name="info_items_selected">items selected</string>
 
 
