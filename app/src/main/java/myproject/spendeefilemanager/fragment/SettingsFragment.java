@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import myproject.spendeefilemanager.R;
@@ -24,9 +22,8 @@ import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.DEFAUL
 
 public class SettingsFragment extends Fragment {
 
-    private LinearLayout mDeaultFolderView;
+    private RelativeLayout mDeaultFolderView;
     private TextView mTextPath;
-    private ImageView mIconForDufaultFolder;
     private SharedPreferences mSettings;
 
     @Override
@@ -35,16 +32,14 @@ public class SettingsFragment extends Fragment {
 
         mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        mDeaultFolderView = (LinearLayout) view.findViewById(R.id.view_default_folder);
+        mDeaultFolderView = (RelativeLayout) view.findViewById(R.id.view_default_folder);
         mTextPath = (TextView) view.findViewById(R.id.default_folder_path);
-        mIconForDufaultFolder = (ImageView) view.findViewById(R.id.icon_for_settings);
 
         if (mSettings.contains(DEFAULT_FOLDER_KEY)) {
             mTextPath.setText(mSettings.getString(DEFAULT_FOLDER_KEY, ""));
         } else {
             mTextPath.setText(FileManager.getInstance().getStartUrl(getActivity()));
         }
-        mIconForDufaultFolder.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_for_default_folder_settings));
 
         mDeaultFolderView.setOnClickListener(new View.OnClickListener() {
             @Override
