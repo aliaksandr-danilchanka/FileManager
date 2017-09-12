@@ -72,8 +72,6 @@ public class DefaultFolderFragment extends Fragment {
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
         mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
 
-        mToolbar.setTitle(getString(R.string.default_folder));
-
         mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         open(mPath);
@@ -185,7 +183,7 @@ public class DefaultFolderFragment extends Fragment {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations( R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
-                            .replace(R.id.container_settings, myFragment)
+                            .replace(R.id.container_default_folder, myFragment)
                             .addToBackStack(null)
                             .commit();
                 } else {

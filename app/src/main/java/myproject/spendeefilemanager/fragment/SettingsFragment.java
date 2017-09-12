@@ -1,6 +1,7 @@
 package myproject.spendeefilemanager.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import myproject.spendeefilemanager.R;
+import myproject.spendeefilemanager.activity.DefaultFolderActivity;
 import myproject.spendeefilemanager.manager.FileManager;
 
 import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.APP_PREFERENCES;
@@ -44,13 +46,8 @@ public class SettingsFragment extends Fragment {
         mDeaultFolderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment myFragment = DefaultFolderFragment.newInstance(FileManager.getInstance().getStartUrl(getContext()));
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations( R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
-                        .replace(R.id.container_settings, myFragment)
-                        .addToBackStack(null)
-                        .commit();
+                Intent intent = new Intent(getActivity(), DefaultFolderActivity.class);
+                startActivity(intent);
             }
         });
 
