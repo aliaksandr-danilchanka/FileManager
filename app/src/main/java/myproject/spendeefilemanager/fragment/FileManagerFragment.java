@@ -217,7 +217,7 @@ public class FileManagerFragment extends BaseFileManagerFragment {
                 File singleItem = mFilesAndFolders.get(position);
                 if (mClickAllowed) {
                     if (singleItem.isDirectory()) {
-                        if (singleItem.getName().length() > mPath.getName().length()) {
+                        if (singleItem.getAbsolutePath().length() > mPath.getAbsolutePath().length()) {
                             Fragment fragment = FileManagerFragment.newInstance(singleItem.getAbsolutePath());
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()

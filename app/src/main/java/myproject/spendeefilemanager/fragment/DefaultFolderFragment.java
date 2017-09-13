@@ -136,7 +136,7 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
             public void onItemClick(View view, int position) {
                 File singleItem = mFilesAndFolders.get(position);
                 if (singleItem.isDirectory()) {
-                    if (singleItem.getName().length() > mPath.getName().length()) {
+                    if (singleItem.getAbsolutePath().length() > mPath.getAbsolutePath().length()) {
                         Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
