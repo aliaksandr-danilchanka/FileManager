@@ -69,16 +69,12 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
         mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         mFilesAndFolders = open(mPath);
-        if (mFilesAndFolders != null) {
-            if (mFilesAndFolders.size() > 0) {
-                showRecyclerView();
-            } else {
-                showFileIsEmptyView();
-            }
-            initializeAdapter();
-        }else{
-
+        if (mFilesAndFolders.size() > 0) {
+            showRecyclerView();
+        } else {
+            showFileIsEmptyView();
         }
+        initializeAdapter();
 
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -112,6 +108,7 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
                         editor.putString(DEFAULT_FOLDER_KEY, mPath.getAbsolutePath());
                         editor.apply();
                         Toast.makeText(getContext(), getString(R.string.default_folder_selected), Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
                     }
                 });
                 return true;
@@ -139,13 +136,23 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
             public void onItemClick(View view, int position) {
                 File singleItem = mFilesAndFolders.get(position);
                 if (singleItem.isDirectory()) {
-                    Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
-                            .replace(R.id.container_default_folder, myFragment)
-                            .addToBackStack(null)
-                            .commit();
+                    if (singleItem.getName().length() > mPath.getName().length()) {
+                        Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.right_to_left_enter, R.anim.right_to_left_exit, R.anim.left_to_right_enter, R.anim.left_to_right_exit)
+                                .replace(R.id.container_default_folder, myFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        Fragment myFragment = DefaultFolderFragment.newInstance(singleItem.getAbsolutePath());
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
+                                .replace(R.id.container_default_folder, myFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 } else {
                     open(singleItem);
                 }

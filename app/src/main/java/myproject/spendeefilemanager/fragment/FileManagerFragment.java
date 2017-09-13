@@ -158,19 +158,6 @@ public class FileManagerFragment extends BaseFileManagerFragment {
         }
     }
 
-    private void setView(ArrayList<File> files) {
-        if(files!=null) {
-            if (files.size() > 0) {
-                showRecyclerView();
-            } else {
-                showFileIsEmptyView();
-            }
-            initializeAdapter();
-        }else{
-
-        }
-    }
-
     public void delete(ArrayList<File> files) {
 
         for (File file : files) {
@@ -202,6 +189,15 @@ public class FileManagerFragment extends BaseFileManagerFragment {
         return true;
     }
 
+    private void setView(ArrayList<File> files) {
+        if (files.size() > 0) {
+            showRecyclerView();
+        } else {
+            showFileIsEmptyView();
+        }
+        initializeAdapter();
+    }
+
     private void deleteDialog(String message, DialogInterface.OnClickListener onClickListener) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -221,13 +217,23 @@ public class FileManagerFragment extends BaseFileManagerFragment {
                 File singleItem = mFilesAndFolders.get(position);
                 if (mClickAllowed) {
                     if (singleItem.isDirectory()) {
-                        Fragment fragment = FileManagerFragment.newInstance(singleItem.getAbsolutePath());
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
-                                .replace(R.id.container, fragment)
-                                .addToBackStack(null)
-                                .commit();
+                        if (singleItem.getName().length() > mPath.getName().length()) {
+                            Fragment fragment = FileManagerFragment.newInstance(singleItem.getAbsolutePath());
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.right_to_left_enter, R.anim.right_to_left_exit, R.anim.left_to_right_enter, R.anim.left_to_right_exit)
+                                    .replace(R.id.container, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        } else {
+                            Fragment fragment = FileManagerFragment.newInstance(singleItem.getAbsolutePath());
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.left_to_right_enter, R.anim.left_to_right_exit, R.anim.right_to_left_enter, R.anim.right_to_left_exit)
+                                    .replace(R.id.container, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
                     } else {
                         open(singleItem);
                     }
