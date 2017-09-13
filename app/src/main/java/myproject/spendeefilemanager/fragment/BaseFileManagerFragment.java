@@ -53,11 +53,7 @@ public abstract class BaseFileManagerFragment extends Fragment {
     }
 
     public ArrayList<File> openDirectory(File file) {
-        if (mFilesAndFolders != null) {
-            mFilesAndFolders.clear();
-        } else {
-            mFilesAndFolders = new ArrayList<>();
-        }
+        mFilesAndFolders = new ArrayList<>();
         ArrayList<File> list = new ArrayList<>(Arrays.asList(file.listFiles()));
         ArrayList<File> listOfDirectory = new ArrayList<>();
         ArrayList<File> listOfFiles = new ArrayList<>();
