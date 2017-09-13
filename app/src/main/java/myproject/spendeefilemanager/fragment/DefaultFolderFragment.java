@@ -69,12 +69,16 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
         mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         mFilesAndFolders = open(mPath);
-        if (mFilesAndFolders.size() > 0) {
-            showRecyclerView();
-        } else {
-            showFileIsEmptyView();
+        if (mFilesAndFolders != null) {
+            if (mFilesAndFolders.size() > 0) {
+                showRecyclerView();
+            } else {
+                showFileIsEmptyView();
+            }
+            initializeAdapter();
+        }else{
+
         }
-        initializeAdapter();
 
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

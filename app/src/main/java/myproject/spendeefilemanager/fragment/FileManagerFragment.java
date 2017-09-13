@@ -159,12 +159,16 @@ public class FileManagerFragment extends BaseFileManagerFragment {
     }
 
     private void setView(ArrayList<File> files) {
-        if (files.size() > 0) {
-            showRecyclerView();
-        } else {
-            showFileIsEmptyView();
+        if(files!=null) {
+            if (files.size() > 0) {
+                showRecyclerView();
+            } else {
+                showFileIsEmptyView();
+            }
+            initializeAdapter();
+        }else{
+
         }
-        initializeAdapter();
     }
 
     public void delete(ArrayList<File> files) {
