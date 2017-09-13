@@ -5,13 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.activity.base.BaseActivity;
@@ -69,13 +74,52 @@ public class MainActivity extends BaseActivity {
                 allowed = false;
                 break;
         }
-
         if (allowed) {
             finish();
             startActivity(mStarterIntent);
-        } else {
-            finish();
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                showNoStoragePermissionSnackbar();
+            } else {
+                finish();
+            }
+        } else {
+                finish();
+        }
+    }
+
+    public void showNoStoragePermissionSnackbar() {
+        Snackbar.make(MainActivity.this.findViewById(R.id.activity_view),
+                getString(R.string.storage_permission_is_not_granted), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.settings), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openApplicationSettings();
+
+                        Toast.makeText(getApplicationContext(),
+                                getString(R.string.open_permission),
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                })
+                .show();
+    }
+
+    public void openApplicationSettings() {
+        Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse(getString(R.string.name_package) + getPackageName()));
+        startActivityForResult(appSettingsIntent, PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            finish();
+            startActivity(mStarterIntent);
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
