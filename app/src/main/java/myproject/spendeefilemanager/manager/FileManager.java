@@ -1,10 +1,7 @@
 package myproject.spendeefilemanager.manager;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,18 +18,20 @@ public class FileManager {
 
     public static synchronized FileManager getInstance() {
 
-        if(sInstance == null)
+        if (sInstance == null)
             sInstance = new FileManager();
 
         return sInstance;
     }
 
-    public String getStartUrl(Context context){
+    public String getStartUrl(Context context) {
         String temp;
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)
-            temp = "/";
-        else temp = Environment.getExternalStorageDirectory().toString();
+//        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED)
+//            temp = "/";
+//        else {
+            temp = Environment.getExternalStorageDirectory().toString();
+//        }
         return temp;
     }
 
@@ -56,7 +55,7 @@ public class FileManager {
 
         ArrayList<File> list = new ArrayList<>();
 
-        for(File file: files) {
+        for (File file : files) {
             if (!isHiddenFile(file))
                 list.add(file);
         }

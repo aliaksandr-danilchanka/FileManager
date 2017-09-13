@@ -1,16 +1,14 @@
 package myproject.spendeefilemanager.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,35 +24,57 @@ import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.DEFAUL
 
 public class MainActivity extends BaseActivity {
 
+
+    private static final int PERMISSION_REQUEST_CODE = 123;
+
     private Toolbar mToolbar;
     private FragmentRefreshListener mFragmentRefreshListener;
     private SharedPreferences mSettings;
+    private Bundle mBundle;
+    private Intent mStarterIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        requestForPermission();
+        mBundle = savedInstanceState;
+
+        mStarterIntent = getIntent();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(mToolbar);
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        String temp;
-        if (mSettings.contains(DEFAULT_FOLDER_KEY)) {
-            temp = mSettings.getString(DEFAULT_FOLDER_KEY, "");
+        if (hasPermissions()) {
+            setFragment();
         } else {
-            temp = FileManager.getInstance().getStartUrl(this);
+            requestPerms();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean allowed = true;
+
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+
+                for (int res : grantResults) {
+                    allowed = allowed && (res == PackageManager.PERMISSION_GRANTED);
+                }
+                break;
+            default:
+                allowed = false;
+                break;
         }
 
-        if (savedInstanceState == null) {
-            Fragment fragment = FileManagerFragment.newInstance(temp);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container, fragment)
-                    .commit();
+        if (allowed) {
+            finish();
+            startActivity(mStarterIntent);
+        } else {
+            finish();
         }
     }
 
@@ -94,42 +114,40 @@ public class MainActivity extends BaseActivity {
         this.mFragmentRefreshListener = fragmentRefreshListener;
     }
 
-    private void requestForPermission() {
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                promptForPermissionsDialog(getString(R.string.error_request_permission), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                100);
-                    }
-                });
-
-            } else {
-
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        100);
-            }
+    private void requestPerms() {
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(permissions, PERMISSION_REQUEST_CODE);
         }
     }
 
-    private void promptForPermissionsDialog(String message, DialogInterface.OnClickListener onClickListener) {
+    private boolean hasPermissions() {
+        int res = 0;
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        for (String perms : permissions) {
+            res = checkCallingOrSelfPermission(perms);
+            if (!(res == PackageManager.PERMISSION_GRANTED)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+    private void setFragment() {
+        String temp;
+        if (mSettings.contains(DEFAULT_FOLDER_KEY)) {
+            temp = mSettings.getString(DEFAULT_FOLDER_KEY, "");
+        } else {
+            temp = FileManager.getInstance().getStartUrl(this);
+        }
 
-        builder.setMessage(message)
-                .setPositiveButton(getString(R.string.ok), onClickListener)
-                .setNegativeButton(getString(R.string.cancel), null)
-                .create()
-                .show();
-
+        if (mBundle == null) {
+            Fragment fragment = FileManagerFragment.newInstance(temp);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, fragment)
+                    .commit();
+        }
     }
 
     public interface FragmentRefreshListener {
