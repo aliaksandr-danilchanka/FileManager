@@ -2,9 +2,7 @@ package myproject.spendeefilemanager.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -132,7 +130,6 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
     public void setIcon(File file, ListItemViewHolder holder) {
 
         String extension;
-        Drawable drawable = null;
 
         try {
 
@@ -154,8 +151,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
                     case ".txt":
                     case ".pdf":
                     case ".ppt":
-                    case ".xls":
-                        drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_file);
+                    case ".xls":holder.mIcon.setImageResource(R.drawable.ic_file);
                         break;
 
                     case ".3ga":
@@ -165,7 +161,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
                     case ".ogg":
                     case ".wav":
                     case ".wma":
-                        drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_audio);
+                        holder.mIcon.setImageResource(R.drawable.ic_audio);
                         break;
 
                     case ".3gp":
@@ -177,7 +173,7 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
                     case ".webm":
                     case ".wmv":
                     case ".vob":
-                        drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_video);
+                        holder.mIcon.setImageResource(R.drawable.ic_video);
                         break;
 
                     case ".ai":
@@ -188,31 +184,27 @@ public class FileManagerAdapter extends RecyclerView.Adapter<FileManagerAdapter.
                     case ".jpeg":
                     case ".png":
                     case ".svg":
-                        drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_image);
+                        holder.mIcon.setImageResource(R.drawable.ic_image);
                         break;
 
                     case ".rar":
                     case ".zip":
                     case ".ZIP":
-                        drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_compressed);
+                        holder.mIcon.setImageResource(R.drawable.ic_compressed);
                         break;
 
                     default:
-                        drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_error);
+                        holder.mIcon.setImageResource(R.drawable.ic_error);
                         break;
                 }
 
             } else if (file.isDirectory()) {
-                drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_folder);
-            } else drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_error);
+                holder.mIcon.setImageResource(R.drawable.ic_folder);
+            } else holder.mIcon.setImageResource(R.drawable.ic_error);
 
         } catch (Exception e) {
-            drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_error);
+            holder.mIcon.setImageResource(R.drawable.ic_error);
         }
-
-        drawable = DrawableCompat.wrap(drawable);
-        holder.mIcon.setImageDrawable(drawable);
-
     }
 
     public int getSelectedItemsCount() {
