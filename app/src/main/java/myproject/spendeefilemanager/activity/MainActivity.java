@@ -48,7 +48,6 @@ public class MainActivity extends BaseActivity {
         mStarterIntent = getIntent();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        setSupportActionBar(mToolbar);
 
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -179,6 +178,7 @@ public class MainActivity extends BaseActivity {
 
     private void setFragment() {
         String temp;
+        setSupportActionBar(mToolbar);
         if (mSettings.contains(DEFAULT_FOLDER_KEY)) {
             temp = mSettings.getString(DEFAULT_FOLDER_KEY, "");
         } else {
