@@ -1,4 +1,4 @@
-package myproject.spendeefilemanager.fragment;
+package myproject.spendeefilemanager.fragment.base;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;

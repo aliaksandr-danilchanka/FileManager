@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.adapter.DefaultFolderAdapter;
+import myproject.spendeefilemanager.fragment.base.BaseFileManagerFragment;
 
 
 /**

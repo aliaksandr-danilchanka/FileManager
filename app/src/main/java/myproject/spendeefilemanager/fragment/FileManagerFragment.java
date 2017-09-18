@@ -27,6 +27,7 @@ import java.util.Arrays;
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.activity.MainActivity;
 import myproject.spendeefilemanager.adapter.FileManagerAdapter;
+import myproject.spendeefilemanager.fragment.base.BaseFileManagerFragment;
 import myproject.spendeefilemanager.manager.FileManager;
 import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
 
@@ -242,11 +243,10 @@ public class FileManagerFragment extends BaseFileManagerFragment {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                mClickAllowed = false;
-
                 if (!mPath.getAbsolutePath().equals(FileManager.getInstance().getStartUrl(getContext())) &&
                         position == 0) {
                 } else {
+                    mClickAllowed = false;
                     if (mActionModes != null) {
                         mAdapter.toggleSelection(position);
                         mActionModes.setTitle(mAdapter.getSelectedItemsCount() + "  " + getString(R.string.info_items_selected));
