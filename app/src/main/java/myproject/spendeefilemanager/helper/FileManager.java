@@ -1,4 +1,4 @@
-package myproject.spendeefilemanager.manager;
+package myproject.spendeefilemanager.helper;
 
 import android.os.Environment;
 
@@ -6,6 +6,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+/**
+ * This is class contain helper methods for all classes in the application
+ */
 
 public class FileManager {
 

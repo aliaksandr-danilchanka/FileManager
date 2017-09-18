@@ -28,8 +28,8 @@ import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.activity.MainActivity;
 import myproject.spendeefilemanager.adapter.FileManagerAdapter;
 import myproject.spendeefilemanager.fragment.base.BaseFileManagerFragment;
-import myproject.spendeefilemanager.manager.FileManager;
-import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
+import myproject.spendeefilemanager.helper.FileManager;
+import myproject.spendeefilemanager.helper.SparseBooleanArrayParcelable;
 
 public class FileManagerFragment extends BaseFileManagerFragment {
 

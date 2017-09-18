@@ -21,7 +21,7 @@ import android.widget.Toast;
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.activity.base.BaseActivity;
 import myproject.spendeefilemanager.fragment.FileManagerFragment;
-import myproject.spendeefilemanager.manager.FileManager;
+import myproject.spendeefilemanager.helper.FileManager;
 
 import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.APP_PREFERENCES;
 import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.DEFAULT_FOLDER_KEY;

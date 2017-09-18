@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.activity.base.BaseActivity;
 import myproject.spendeefilemanager.fragment.DefaultFolderFragment;
-import myproject.spendeefilemanager.manager.FileManager;
+import myproject.spendeefilemanager.helper.FileManager;
 
 public class DefaultFolderActivity extends BaseActivity {
 

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.io.File;
 
 import myproject.spendeefilemanager.R;
-import myproject.spendeefilemanager.manager.FileManager;
+import myproject.spendeefilemanager.helper.FileManager;
 
 public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ListItemViewHolder> {
 

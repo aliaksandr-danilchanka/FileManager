@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.activity.DefaultFolderActivity;
-import myproject.spendeefilemanager.manager.FileManager;
+import myproject.spendeefilemanager.helper.FileManager;
 
 import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.APP_PREFERENCES;
 import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.DEFAULT_FOLDER_KEY;

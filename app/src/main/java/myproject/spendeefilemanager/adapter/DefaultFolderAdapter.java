@@ -10,7 +10,7 @@ import java.util.Date;
 
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.adapter.base.BaseAdapter;
-import myproject.spendeefilemanager.manager.FileManager;
+import myproject.spendeefilemanager.helper.FileManager;
 
 public class DefaultFolderAdapter extends BaseAdapter {
 

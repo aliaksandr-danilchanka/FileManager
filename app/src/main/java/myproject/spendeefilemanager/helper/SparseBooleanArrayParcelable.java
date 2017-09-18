@@ -1,8 +1,11 @@
-package myproject.spendeefilemanager.sparse;
+package myproject.spendeefilemanager.helper;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseBooleanArray;
+/**
+ * This is class transfer array of type SparseBoolean to Parcelable.
+ */
 
 public class SparseBooleanArrayParcelable extends SparseBooleanArray implements Parcelable {
     public static Parcelable.Creator<SparseBooleanArrayParcelable> CREATOR = new Parcelable.Creator<SparseBooleanArrayParcelable>() {

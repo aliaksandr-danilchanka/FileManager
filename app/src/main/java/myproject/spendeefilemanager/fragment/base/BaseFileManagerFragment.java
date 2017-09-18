@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import myproject.spendeefilemanager.R;
-import myproject.spendeefilemanager.manager.FileManager;
+import myproject.spendeefilemanager.helper.FileManager;
 
 public abstract class BaseFileManagerFragment extends Fragment {
 
