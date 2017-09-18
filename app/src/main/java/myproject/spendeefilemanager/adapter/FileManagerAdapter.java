@@ -14,10 +14,6 @@ import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.adapter.base.BaseAdapter;
 import myproject.spendeefilemanager.manager.FileManager;
 
-/**
- * Created by Aliaksandr on 9/6/2017.
- */
-
 public class FileManagerAdapter extends BaseAdapter {
 
     private ArrayList<File> mFilesAndFolders;
@@ -29,10 +25,9 @@ public class FileManagerAdapter extends BaseAdapter {
     public FileManagerAdapter(ArrayList<File> filesAndFolders, Context context, File file, OnItemClickListener onItemClickListener) {
         this.mFilesAndFolders = filesAndFolders;
         this.mOnItemClickListener = onItemClickListener;
-        if (!file.getAbsolutePath().equals(FileManager.getInstance().getStartUrl(context))) {
-            File beforeFile = new File(file.getAbsolutePath()
+        if (!file.getAbsolutePath().equals(FileManager.getInstance().getStartUrl())) {
+            this.mBeforeFile = new File(file.getAbsolutePath()
                     .substring(0, file.getAbsolutePath().length() - file.getName().length() - 1));
-            this.mBeforeFile = beforeFile;
             this.mFilesAndFolders.add(0, mBeforeFile);
         }
         mSelectedItems = new SparseBooleanArray();
@@ -117,7 +112,7 @@ public class FileManagerAdapter extends BaseAdapter {
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
-        public void onItemLongClick(View view, int position);
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
     }
 }

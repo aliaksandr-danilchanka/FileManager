@@ -32,6 +32,7 @@
     <string name="default_folder_selected">Files successfully selected</string>
     <string name="not_read_access">Do not have read access</string>
     <string name="files_successfully_deleted">Files successfully deleted</string>
+    <string name="files_refresh">File is updated</string>
     <string name="no_handler_for_type">No handler for this type of file.</string>
 
 </resources>

@@ -165,10 +165,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean hasPermissions() {
-        int res = 0;
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
         for (String perms : permissions) {
-            res = checkCallingOrSelfPermission(perms);
+           int res = checkCallingOrSelfPermission(perms);
             if (!(res == PackageManager.PERMISSION_GRANTED)) {
                 return false;
             }
@@ -182,7 +181,7 @@ public class MainActivity extends BaseActivity {
         if (mSettings.contains(DEFAULT_FOLDER_KEY)) {
             temp = mSettings.getString(DEFAULT_FOLDER_KEY, "");
         } else {
-            temp = FileManager.getInstance().getStartUrl(this);
+            temp = FileManager.getInstance().getStartUrl();
         }
 
         if (mBundle == null) {

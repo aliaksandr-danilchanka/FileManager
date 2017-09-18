@@ -31,11 +31,6 @@ import myproject.spendeefilemanager.fragment.base.BaseFileManagerFragment;
 import myproject.spendeefilemanager.manager.FileManager;
 import myproject.spendeefilemanager.sparse.SparseBooleanArrayParcelable;
 
-
-/**
- * Created by Aliaksandr on 9/6/2017.
- */
-
 public class FileManagerFragment extends BaseFileManagerFragment {
 
     public static final String PATH_KEY = "PATH_KEY";
@@ -45,7 +40,6 @@ public class FileManagerFragment extends BaseFileManagerFragment {
     private LinearLayout mViewFileIsEmpty;
     private RecyclerView mRecyclerView;
     private ArrayList<File> mFilesAndFolders;
-    private Toolbar mToolbar;
     private FileManagerAdapter mAdapter;
     private ActionMode mActionModes;
     private boolean mClickAllowed;
@@ -125,8 +119,8 @@ public class FileManagerFragment extends BaseFileManagerFragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mViewFileIsEmpty = (LinearLayout) view.findViewById(R.id.view_file_is_empty);
-        mToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
-        mToolbar.setTitle(mPath.getName());
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_actionbar);
+        toolbar.setTitle(mPath.getName());
 
         mFilesAndFolders = open(mPath);
         setView(mFilesAndFolders);
@@ -146,6 +140,7 @@ public class FileManagerFragment extends BaseFileManagerFragment {
             public void onRefresh() {
                 mFilesAndFolders = openDirectory(mPath);
                 setView(mFilesAndFolders);
+                Toast.makeText(getContext(), getString(R.string.files_refresh), Toast.LENGTH_SHORT).show();
             }
         });
         return view;
@@ -170,7 +165,7 @@ public class FileManagerFragment extends BaseFileManagerFragment {
             }
         }
         Toast.makeText(getContext(), getString(R.string.files_successfully_deleted), Toast.LENGTH_SHORT).show();
-        openDirectory(mPath);
+        mFilesAndFolders = openDirectory(mPath);
     }
 
     public boolean deleteFile(File file) {
@@ -243,7 +238,7 @@ public class FileManagerFragment extends BaseFileManagerFragment {
 
             @Override
             public void onItemLongClick(View view, int position) {
-                if (!mPath.getAbsolutePath().equals(FileManager.getInstance().getStartUrl(getContext())) &&
+                if (!mPath.getAbsolutePath().equals(FileManager.getInstance().getStartUrl()) &&
                         position == 0) {
                 } else {
                     mClickAllowed = false;

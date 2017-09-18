@@ -4,10 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseBooleanArray;
 
-/**
- * Created by Aliaksandr on 9/9/2017.
- */
-
 public class SparseBooleanArrayParcelable extends SparseBooleanArray implements Parcelable {
     public static Parcelable.Creator<SparseBooleanArrayParcelable> CREATOR = new Parcelable.Creator<SparseBooleanArrayParcelable>() {
         @Override
@@ -34,8 +30,7 @@ public class SparseBooleanArrayParcelable extends SparseBooleanArray implements 
         }
     };
 
-    public SparseBooleanArrayParcelable() {
-
+    private SparseBooleanArrayParcelable() {
     }
 
     public SparseBooleanArrayParcelable(SparseBooleanArray sparseBooleanArray) {

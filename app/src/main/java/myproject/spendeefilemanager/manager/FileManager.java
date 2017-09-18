@@ -1,6 +1,5 @@
 package myproject.spendeefilemanager.manager;
 
-import android.content.Context;
 import android.os.Environment;
 
 import java.io.File;
@@ -8,30 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * Created by Aliaksandr on 9/6/2017.
- */
-
 public class FileManager {
 
     private static FileManager sInstance;
 
-    public static synchronized FileManager getInstance() {
-
-        if (sInstance == null)
-            sInstance = new FileManager();
-
-        return sInstance;
-    }
-
-    public String getStartUrl(Context context) {
+    public String getStartUrl() {
         String temp;
-//        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED)
-//            temp = "/";
-//        else {
-            temp = Environment.getExternalStorageDirectory().toString();
-//        }
+        temp = Environment.getExternalStorageDirectory().toString();
         return temp;
     }
 
@@ -46,12 +28,11 @@ public class FileManager {
         return mFiles;
     }
 
-    public boolean isHiddenFile(File file) {
-
+    private boolean isHiddenFile(File file) {
         return file.getName().startsWith(".");
     }
 
-    public ArrayList<File> removeHiddenFiles(ArrayList<File> files) {
+    private ArrayList<File> removeHiddenFiles(ArrayList<File> files) {
 
         ArrayList<File> list = new ArrayList<>();
 
@@ -79,5 +60,13 @@ public class FileManager {
             }
             return ext.toLowerCase();
         }
+    }
+
+    public static synchronized FileManager getInstance() {
+
+        if (sInstance == null)
+            sInstance = new FileManager();
+
+        return sInstance;
     }
 }

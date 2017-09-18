@@ -18,32 +18,23 @@ import myproject.spendeefilemanager.manager.FileManager;
 import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.APP_PREFERENCES;
 import static myproject.spendeefilemanager.fragment.DefaultFolderFragment.DEFAULT_FOLDER_KEY;
 
-/**
- * Created by Aliaksandr on 9/8/2017.
- */
-
 public class SettingsFragment extends Fragment {
-
-    private RelativeLayout mDeaultFolderView;
-    private TextView mTextPath;
-    private SharedPreferences mSettings;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, null);
 
-        mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences mSettings = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        mDeaultFolderView = (RelativeLayout) view.findViewById(R.id.view_default_folder);
-        mTextPath = (TextView) view.findViewById(R.id.default_folder_path);
+        RelativeLayout deaultFolderView = (RelativeLayout) view.findViewById(R.id.view_default_folder);
+        TextView mTextPath = (TextView) view.findViewById(R.id.default_folder_path);
 
         if (mSettings.contains(DEFAULT_FOLDER_KEY)) {
             mTextPath.setText(mSettings.getString(DEFAULT_FOLDER_KEY, ""));
         } else {
-            mTextPath.setText(FileManager.getInstance().getStartUrl(getActivity()));
+            mTextPath.setText(FileManager.getInstance().getStartUrl());
         }
 
-        mDeaultFolderView.setOnClickListener(new View.OnClickListener() {
+        deaultFolderView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), DefaultFolderActivity.class);

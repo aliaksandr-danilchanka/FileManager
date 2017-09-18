@@ -12,10 +12,6 @@ import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.adapter.base.BaseAdapter;
 import myproject.spendeefilemanager.manager.FileManager;
 
-/**
- * Created by Aliaksandr on 9/8/2017.
- */
-
 public class DefaultFolderAdapter extends BaseAdapter {
 
     private ArrayList<File> mFilesAndFolders;
@@ -27,10 +23,9 @@ public class DefaultFolderAdapter extends BaseAdapter {
     public DefaultFolderAdapter(ArrayList<File> filesAndFolders, Context context, File file, OnItemClickListener onItemClickListener) {
         this.mFilesAndFolders = filesAndFolders;
         this.mOnItemClickListener = onItemClickListener;
-        if (!file.getAbsolutePath().equals(FileManager.getInstance().getStartUrl(context))) {
-            File beforeFile = new File(file.getAbsolutePath()
+        if (!file.getAbsolutePath().equals(FileManager.getInstance().getStartUrl())) {
+            this.mBeforeFile = new File(file.getAbsolutePath()
                     .substring(0, file.getAbsolutePath().length() - file.getName().length() - 1));
-            this.mBeforeFile = beforeFile;
             this.mFilesAndFolders.add(0, mBeforeFile);
         }
         this.mContext = context;
@@ -64,6 +59,6 @@ public class DefaultFolderAdapter extends BaseAdapter {
     }
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        void onItemClick(View view, int position);
     }
 }

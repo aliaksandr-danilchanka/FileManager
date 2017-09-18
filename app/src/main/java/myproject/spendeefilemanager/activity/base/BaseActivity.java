@@ -3,10 +3,6 @@ package myproject.spendeefilemanager.activity.base;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-/**
- * Created by Aliaksandr on 9/5/2017.
- */
-
 public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

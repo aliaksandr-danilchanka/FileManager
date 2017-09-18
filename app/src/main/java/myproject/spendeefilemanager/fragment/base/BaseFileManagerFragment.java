@@ -14,10 +14,6 @@ import java.util.Arrays;
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.manager.FileManager;
 
-/**
- * Created by Aliaksandr on 9/12/2017.
- */
-
 public abstract class BaseFileManagerFragment extends Fragment {
 
     private ArrayList<File> mFilesAndFolders;

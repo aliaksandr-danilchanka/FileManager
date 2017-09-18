@@ -22,7 +22,7 @@ public class DefaultFolderActivity extends BaseActivity {
         setUpAppBar();
 
         if (savedInstanceState == null) {
-            Fragment myFragment = DefaultFolderFragment.newInstance(FileManager.getInstance().getStartUrl(this));
+            Fragment myFragment = DefaultFolderFragment.newInstance(FileManager.getInstance().getStartUrl());
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container_default_folder, myFragment)

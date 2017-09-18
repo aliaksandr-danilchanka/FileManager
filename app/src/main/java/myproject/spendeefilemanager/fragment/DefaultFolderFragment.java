@@ -27,11 +27,6 @@ import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.adapter.DefaultFolderAdapter;
 import myproject.spendeefilemanager.fragment.base.BaseFileManagerFragment;
 
-
-/**
- * Created by Aliaksandr on 9/8/2017.
- */
-
 public class DefaultFolderFragment extends BaseFileManagerFragment {
 
     public static final String PATH_KEY = "PATH_KEY";
@@ -42,8 +37,7 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
     private LinearLayout mViewFileIsEmpty;
     private RecyclerView mRecyclerView;
     private ArrayList<File> mFilesAndFolders;
-    private Toolbar mToolbar;
-    private DefaultFolderAdapter mAdapter;
+    protected Toolbar mToolbar;
     private SharedPreferences mSettings;
 
     public static DefaultFolderFragment newInstance(String file) {
@@ -132,7 +126,7 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
     }
 
     private void initializeAdapter() {
-        mAdapter = new DefaultFolderAdapter(mFilesAndFolders, getContext(), mPath, new DefaultFolderAdapter.OnItemClickListener() {
+        DefaultFolderAdapter adapter = new DefaultFolderAdapter(mFilesAndFolders, getContext(), mPath, new DefaultFolderAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 File singleItem = mFilesAndFolders.get(position);
@@ -159,7 +153,7 @@ public class DefaultFolderFragment extends BaseFileManagerFragment {
                 }
             }
         });
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(adapter);
     }
 
     private void showRecyclerView() {

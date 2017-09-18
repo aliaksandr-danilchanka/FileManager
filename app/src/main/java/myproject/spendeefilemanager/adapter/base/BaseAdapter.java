@@ -14,10 +14,6 @@ import java.io.File;
 import myproject.spendeefilemanager.R;
 import myproject.spendeefilemanager.manager.FileManager;
 
-/**
- * Created by Aliaksandr on 9/18/2017.
- */
-
 public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ListItemViewHolder> {
 
     @Override
@@ -29,7 +25,7 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ListI
         return new ListItemViewHolder(view);
     }
 
-    public void setIcon(File file, ListItemViewHolder holder) {
+    protected void setIcon(File file, ListItemViewHolder holder) {
 
         String extension;
 
@@ -117,7 +113,7 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ListI
         public ImageView mIcon;
         LinearLayout mLinearLayout;
 
-        public ListItemViewHolder(View itemView) {
+        ListItemViewHolder(View itemView) {
             super(itemView);
             mCardView = (CardView) itemView.findViewById(R.id.cardView);
             mTitle = (TextView) itemView.findViewById(R.id.title);
